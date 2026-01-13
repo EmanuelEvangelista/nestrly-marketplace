@@ -1,7 +1,8 @@
+import React from "react";
 import Image from "next/image";
 import logo from "@/assets/images/logo-nestrly.png";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -12,7 +13,7 @@ const Footer = () => {
         </div>
         <div>
           <p className="text-sm text-gray-500 mt-2 md:mt-0">
-            &copy; {currentYear} PropertyPulse. All rights reserved.
+            &copy; {currentYear} Nestrly. All rights reserved.
           </p>
         </div>
       </div>

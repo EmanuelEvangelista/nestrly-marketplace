@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const PropertiesAddPage = () => {
+const PropertiesAddPage: React.FC = () => {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold">Properties</h1>
