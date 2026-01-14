@@ -4,7 +4,7 @@ import { Property } from "@/types/property";
 import PropertyCard from "@/components/PropertyCard";
 import { NextPage } from "next";
 
-const properties: Property[] = propertiesData as Property[];
+const properties: Property[] = propertiesData;
 
 const PropertiesPage: NextPage = () => {
   return (
