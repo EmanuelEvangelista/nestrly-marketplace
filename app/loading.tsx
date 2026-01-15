@@ -2,7 +2,7 @@
 import ClipLoader from "react-spinners/ClipLoader";
 import React from "react";
 
-interface loadingProps {
+interface LoadingProps {
   loading: boolean;
 }
 
@@ -12,7 +12,7 @@ const override: React.CSSProperties = {
   borderColor: "red",
 };
 
-const LoadingPage: React.FC<loadingProps> = ({ loading }) => {
+const LoadingPage = ({ loading }: LoadingProps) => {
   return (
     <ClipLoader
       color="#3b82f6"

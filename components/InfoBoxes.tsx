@@ -1,7 +1,7 @@
 import React from "react";
 import InfoBox from "@/components/InfoBox";
 
-const InfoBoxes: React.FC = () => {
+const InfoBoxes = () => {
   return (
     <section>
       <div className="container-xl lg:container m-auto">

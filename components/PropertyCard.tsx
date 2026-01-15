@@ -14,7 +14,7 @@ interface PropertyCardProps {
   property: Property;
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+const PropertyCard = ({ property }: PropertyCardProps) => {
   const getRateDisplay = () => {
     const { rates } = property;
 

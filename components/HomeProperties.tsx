@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const properties: Property[] = propertiesData;
 
-const HomeProperties: React.FC = () => {
+const HomeProperties = () => {
   const recentProperties = properties
     .sort(() => 0.5 - Math.random())
     .slice(0, 3);

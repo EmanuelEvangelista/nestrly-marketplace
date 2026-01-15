@@ -15,13 +15,13 @@ interface InfoBoxProps {
   children: React.ReactNode; // Tipo necesario para el contenido entre las etiquetas
 }
 
-const InfoBox: React.FC<InfoBoxProps> = ({
+const InfoBox = ({
   heading,
   backgroundColor = "bg-yellow-200",
   textColor = "text-yellow-800",
   buttonInfo,
   children,
-}) => {
+}: InfoBoxProps) => {
   return (
     <div className={`${backgroundColor} p-6 rounded-lg shadow-md`}>
       <h2 className={`${textColor} text-2xl font-bold`}>{heading}</h2>

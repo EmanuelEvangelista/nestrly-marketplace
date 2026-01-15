@@ -1,6 +1,6 @@
 import React from "react";
 
-const Hero: React.FC = () => {
+const Hero = () => {
   return (
     // <!-- Hero -->
     <section className="bg-[#0f172a] py-20 mb-4">

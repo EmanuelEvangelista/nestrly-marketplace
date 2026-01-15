@@ -2,11 +2,10 @@ import React from "react";
 import propertiesData from "@/properties.json";
 import { Property } from "@/types/property";
 import PropertyCard from "@/components/PropertyCard";
-import { NextPage } from "next";
 
 const properties: Property[] = propertiesData;
 
-const PropertiesPage: NextPage = () => {
+const PropertiesPage = () => {
   return (
     <section className="px-4 py-6">
       <div className="container-xl lg:container m-auto px-4 py-6">

@@ -7,7 +7,7 @@ import profileDefault from "@/assets/images/profile.png";
 import { FaGoogle, FaBars, FaBell } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);

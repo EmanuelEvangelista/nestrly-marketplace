@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import logo from "@/assets/images/logo-nestrly.png";
 
-const Footer: React.FC = () => {
+const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
