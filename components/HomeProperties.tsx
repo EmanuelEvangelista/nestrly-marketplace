@@ -1,12 +1,25 @@
 import React from "react";
-import propertiesData from "@/properties.json";
-import { Property } from "@/types/property";
-import PropertyCard from "./PropertyCard";
+import PropertyCard from "@/components/PropertyCard";
 import Link from "next/link";
+import { PropertyType } from "@/models/Property";
 
-const properties: Property[] = propertiesData;
+async function fetchProperties(): Promise<PropertyType[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`);
 
-const HomeProperties = () => {
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching properties:", error);
+  }
+}
+
+const HomeProperties = async () => {
+  const properties = await fetchProperties();
+
   const recentProperties = properties
     .sort(() => 0.5 - Math.random())
     .slice(0, 3);

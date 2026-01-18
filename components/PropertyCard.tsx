@@ -8,10 +8,10 @@ import {
   FaMoneyBill,
   FaMapMarker,
 } from "react-icons/fa";
-import { Property } from "../types/property";
+import { PropertyType } from "@/models/Property";
 
 interface PropertyCardProps {
-  property: Property;
+  property: PropertyType;
 }
 
 const PropertyCard = ({ property }: PropertyCardProps) => {

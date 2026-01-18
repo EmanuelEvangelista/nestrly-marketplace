@@ -45,8 +45,11 @@ const propertySchema = new Schema(
 );
 
 // Define TypeScript type for Property document
-export type PropertyType = InferSchemaType<typeof propertySchema>;
+export type PropertyType = InferSchemaType<typeof propertySchema> & {
+  _id: string;
+};
 
-const Property = models.Property || model("Property", propertySchema);
+const Property =
+  models.Property || model<PropertyType>("Property", propertySchema);
 
 export default Property;
