@@ -30,6 +30,6 @@
     "**/*.mts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "utils/request.js"  ],
   "exclude": ["node_modules"]
 }
