@@ -7,9 +7,12 @@ import profileDefault from "@/assets/images/profile.png";
 import { FaGoogle, FaBars, FaBell } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { profile } from "node:console";
+import { set } from "mongoose";
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const profileImage = session?.user?.image || profileDefault;
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false);
@@ -25,7 +28,7 @@ const Navbar = () => {
     setAuthProviders();
   }, []);
 
-  console.log(providers);
+  console.log(profileImage);
 
   return (
     <nav className="bg-[#0f172a] border-b border-blue-500">
@@ -137,8 +140,10 @@ const Navbar = () => {
                   <span className="absolute -inset-1.5"></span>
                   <Image
                     className="h-8 w-8 rounded-full"
-                    src={profileDefault}
+                    src={profileImage}
                     alt="User Profile"
+                    width={32}
+                    height={32}
                   />
                 </button>
 
@@ -147,16 +152,28 @@ const Navbar = () => {
                     <Link
                       href="/profile"
                       className="block px-4 py-2 text-sm text-yellow-700"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                      }}
                     >
                       Your Profile
                     </Link>
                     <Link
                       href="/properties/saved"
                       className="block px-4 py-2 text-sm text-yellow-700"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                      }}
                     >
                       Saved Properties
                     </Link>
-                    <button className="block w-full text-left px-4 py-2 text-sm text-yellow-700">
+                    <button
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        signOut();
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-yellow-700"
+                    >
                       Sign Out
                     </button>
                   </div>
