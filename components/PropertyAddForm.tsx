@@ -1,14 +1,9 @@
 "use client";
-import { useState, ChangeEvent } from "react";
+
+import { useState } from "react";
 import { PropertyFormData } from "@/models/Property";
 
 const PropertyAddForm = () => {
-  /**
-   * STATE PRINCIPAL DEL FORMULARIO
-   * --------------------------------
-   * `fields` contiene todos los valores del formulario.
-   * Está tipado con PropertyFormData para tener autocompletado y seguridad de tipos.
-   */
   const [fields, setFields] = useState<PropertyFormData>({
     name: "Test Property",
     type: "Apartment",
@@ -19,14 +14,14 @@ const PropertyAddForm = () => {
       state: "Test state",
       zipCode: "",
     },
-    beds: 2,
-    baths: 1,
-    square_feet: 1800,
+    beds: "2",
+    baths: "1",
+    square_feet: "1800",
     amenities: [],
     rates: {
-      nightly: 0,
-      weekly: 0,
-      monthly: 4000,
+      nightly: "",
+      weekly: "",
+      monthly: "4000",
     },
     seller_info: {
       name: "",
@@ -36,107 +31,82 @@ const PropertyAddForm = () => {
     images: [],
   });
 
-  /**
-   * MANEJADOR GENERAL DE INPUTS
-   * --------------------------------
-   * Funciona para:
-   * - inputs simples (name, beds, baths, etc.)
-   * - inputs anidados (location.city, rates.monthly, seller_info.email)
-   */
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
 
-    /**
-     * Si el name incluye un punto (.)
-     * significa que estamos editando un objeto anidado
-     * Ej: location.city, rates.monthly
-     */
+    //Checkea si hay propiedades anidades
+
     if (name.includes(".")) {
-      const [outerKey, innerKey] = name.split(".") as [
-        keyof PropertyFormData,
-        string,
-      ];
-
-      // Detectamos si el campo pertenece a "rates"
-      const isRateField = outerKey === "rates";
-
-      // Si es rate, lo convertimos a número
-      const finalValue = isRateField && value !== "" ? parseInt(value) : value;
+      const [outerKey, innerKey] = name.split(".");
 
       setFields((prevFields) => ({
         ...prevFields,
+
         [outerKey]: {
-          ...(prevFields[outerKey] as object),
-          [innerKey]: finalValue,
+          ...prevFields[outerKey],
+
+          [innerKey]: value,
         },
       }));
     } else {
-      /**
-       * Campos de primer nivel
-       * Ej: beds, baths, square_feet
-       */
-      const isNumeric = ["beds", "baths", "square_feet"].includes(name);
-
-      const finalValue = isNumeric && value !== "" ? parseInt(value) : value;
+      //Si no hay propiedades anidadas
 
       setFields((prevFields) => ({
         ...prevFields,
-        [name]: finalValue,
+
+        [name]: value,
       }));
     }
   };
 
-  /**
-   * MANEJADOR DE AMENITIES (CHECKBOXES)
-   * --------------------------------
-   * Agrega o quita valores del array `amenities`
-   */
-  const handleAmenitiesChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAmenitiesChange = (e: any) => {
     const { value, checked } = e.target;
 
-    // Clonamos el array actual (inmutabilidad)
+    //Clone the current array
+
     const updatedAmenities = [...fields.amenities];
 
     if (checked) {
-      // Si está marcado, agregamos el amenity
+      // Add value to array
+
       updatedAmenities.push(value);
     } else {
-      // Si se desmarca, lo eliminamos
+      // Remove value from array
+
       const index = updatedAmenities.indexOf(value);
+
       if (index !== -1) {
         updatedAmenities.splice(index, 1);
       }
     }
 
-    // Actualizamos el estado
+    // Update state with updated array
+
     setFields((prevFields) => ({
       ...prevFields,
+
       amenities: updatedAmenities,
     }));
   };
 
-  /**
-   * MANEJADOR DE IMÁGENES
-   * --------------------------------
-   * Guarda archivos File en el estado
-   */
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: any) => {
     const { files } = e.target;
 
-    if (!files) return;
+    // Clone images array
 
-    // Clonamos el array de imágenes actual
     const updatedImages = [...fields.images];
 
-    // Convertimos FileList en array y lo agregamos
-    for (const file of Array.from(files)) {
+    // Add new files to the array
+
+    for (const file of files) {
       updatedImages.push(file);
     }
 
+    // Update state with array of images
+
     setFields((prevFields) => ({
       ...prevFields,
+
       images: updatedImages,
     }));
   };
@@ -149,6 +119,7 @@ const PropertyAddForm = () => {
         <label htmlFor="type" className="block text-gray-700 font-bold mb-2">
           Property Type
         </label>
+
         <select
           id="type"
           name="type"
@@ -158,18 +129,26 @@ const PropertyAddForm = () => {
           onChange={handleChange}
         >
           <option value="Apartment">Apartment</option>
+
           <option value="Condo">Condo</option>
+
           <option value="House">House</option>
+
           <option value="Cabin Or Cottage">Cabin or Cottage</option>
+
           <option value="Room">Room</option>
+
           <option value="Studio">Studio</option>
+
           <option value="Other">Other</option>
         </select>
       </div>
+
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2">
           Listing Name
         </label>
+
         <input
           type="text"
           id="name"
@@ -181,6 +160,7 @@ const PropertyAddForm = () => {
           onChange={handleChange}
         />
       </div>
+
       <div className="mb-4">
         <label
           htmlFor="description"
@@ -188,6 +168,7 @@ const PropertyAddForm = () => {
         >
           Description
         </label>
+
         <textarea
           id="description"
           name="description"
@@ -201,6 +182,7 @@ const PropertyAddForm = () => {
 
       <div className="mb-4 bg-blue-50 p-4">
         <label className="block text-gray-700 font-bold mb-2">Location</label>
+
         <input
           type="text"
           id="street"
@@ -210,6 +192,7 @@ const PropertyAddForm = () => {
           value={fields.location.street}
           onChange={handleChange}
         />
+
         <input
           type="text"
           id="city"
@@ -220,6 +203,7 @@ const PropertyAddForm = () => {
           value={fields.location.city}
           onChange={handleChange}
         />
+
         <input
           type="text"
           id="state"
@@ -230,10 +214,11 @@ const PropertyAddForm = () => {
           value={fields.location.state}
           onChange={handleChange}
         />
+
         <input
           type="text"
           id="zipcode"
-          name="location.zipCode"
+          name="location.zipcode"
           className="border rounded w-full py-2 px-3 mb-2"
           placeholder="Zipcode"
           value={fields.location.zipCode}
@@ -246,6 +231,7 @@ const PropertyAddForm = () => {
           <label htmlFor="beds" className="block text-gray-700 font-bold mb-2">
             Beds
           </label>
+
           <input
             type="number"
             id="beds"
@@ -256,10 +242,12 @@ const PropertyAddForm = () => {
             onChange={handleChange}
           />
         </div>
+
         <div className="w-full sm:w-1/3 px-2">
           <label htmlFor="baths" className="block text-gray-700 font-bold mb-2">
             Baths
           </label>
+
           <input
             type="number"
             id="baths"
@@ -270,6 +258,7 @@ const PropertyAddForm = () => {
             onChange={handleChange}
           />
         </div>
+
         <div className="w-full sm:w-1/3 pl-2">
           <label
             htmlFor="square_feet"
@@ -277,6 +266,7 @@ const PropertyAddForm = () => {
           >
             Square Feet
           </label>
+
           <input
             type="number"
             id="square_feet"
@@ -291,6 +281,7 @@ const PropertyAddForm = () => {
 
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2">Amenities</label>
+
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           <div>
             <input
@@ -302,8 +293,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Wifi")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_wifi">Wifi</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -314,8 +307,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Full Kitchen")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_kitchen">Full kitchen</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -326,8 +321,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Washer & Dryer")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_washer_dryer">Washer & Dryer</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -338,8 +335,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Free Parking")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_free_parking">Free Parking</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -350,8 +349,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Swimming Pool")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_pool">Swimming Pool</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -362,8 +363,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Hot Tub")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_hot_tub">Hot Tub</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -374,8 +377,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("24/7 Security")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_24_7_security">24/7 Security</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -386,10 +391,12 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Wheelchair Accessible")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_wheelchair_accessible">
               Wheelchair Accessible
             </label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -400,8 +407,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Elevator Access")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_elevator_access">Elevator Access</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -412,8 +421,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Dishwasher")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_dishwasher">Dishwasher</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -424,10 +435,12 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Gym/Fitness Center")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_gym_fitness_center">
               Gym/Fitness Center
             </label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -438,8 +451,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Air Conditioning")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_air_conditioning">Air Conditioning</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -450,8 +465,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Balcony/Patio")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_balcony_patio">Balcony/Patio</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -462,8 +479,10 @@ const PropertyAddForm = () => {
               checked={fields.amenities.includes("Smart TV")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_smart_tv">Smart TV</label>
           </div>
+
           <div>
             <input
               type="checkbox"
@@ -471,9 +490,10 @@ const PropertyAddForm = () => {
               name="amenities"
               value="Coffee Maker"
               className="mr-2"
-              checked={fields.amenities.includes("Coffee Maker")}
+              checked={fields.amenities.includes("Coffe Maker")}
               onChange={handleAmenitiesChange}
             />
+
             <label htmlFor="amenity_coffee_maker">Coffee Maker</label>
           </div>
         </div>
@@ -483,11 +503,13 @@ const PropertyAddForm = () => {
         <label className="block text-gray-700 font-bold mb-2">
           Rates (Leave blank if not applicable)
         </label>
+
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
           <div className="flex items-center">
             <label htmlFor="weekly_rate" className="mr-2">
               Weekly
             </label>
+
             <input
               type="number"
               id="weekly_rate"
@@ -497,10 +519,12 @@ const PropertyAddForm = () => {
               onChange={handleChange}
             />
           </div>
+
           <div className="flex items-center">
             <label htmlFor="monthly_rate" className="mr-2">
               Monthly
             </label>
+
             <input
               type="number"
               id="monthly_rate"
@@ -510,10 +534,12 @@ const PropertyAddForm = () => {
               onChange={handleChange}
             />
           </div>
+
           <div className="flex items-center">
             <label htmlFor="nightly_rate" className="mr-2">
               Nightly
             </label>
+
             <input
               type="number"
               id="nightly_rate"
@@ -533,16 +559,18 @@ const PropertyAddForm = () => {
         >
           Seller Name
         </label>
+
         <input
           type="text"
           id="seller_name"
-          name="seller_info.name"
+          name="seller_info.name."
           className="border rounded w-full py-2 px-3"
           placeholder="Name"
           value={fields.seller_info.name}
           onChange={handleChange}
         />
       </div>
+
       <div className="mb-4">
         <label
           htmlFor="seller_email"
@@ -550,6 +578,7 @@ const PropertyAddForm = () => {
         >
           Seller Email
         </label>
+
         <input
           type="email"
           id="seller_email"
@@ -561,6 +590,7 @@ const PropertyAddForm = () => {
           onChange={handleChange}
         />
       </div>
+
       <div className="mb-4">
         <label
           htmlFor="seller_phone"
@@ -568,6 +598,7 @@ const PropertyAddForm = () => {
         >
           Seller Phone
         </label>
+
         <input
           type="tel"
           id="seller_phone"
@@ -583,6 +614,7 @@ const PropertyAddForm = () => {
         <label htmlFor="images" className="block text-gray-700 font-bold mb-2">
           Images (Select up to 4 images)
         </label>
+
         <input
           type="file"
           id="images"

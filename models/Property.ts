@@ -49,9 +49,27 @@ const propertySchema = new Schema(
 
 export type PropertyFormData = Omit<
   PropertyType,
-  "_id" | "owner" | "is_featured" | "createdAt" | "updatedAt" | "images"
+  | "_id"
+  | "owner"
+  | "is_featured"
+  | "createdAt"
+  | "updatedAt"
+  | "images"
+  | "beds"
+  | "baths"
+  | "square_feet"
+  | "rates"
 > & {
   images: File[];
+  // Forzamos a que estos campos acepten string en el formulario
+  beds: string | number;
+  baths: string | number;
+  square_feet: string | number;
+  rates: {
+    nightly: string | number;
+    weekly: string | number;
+    monthly: string | number;
+  };
 };
 
 // Define TypeScript type for Property document
