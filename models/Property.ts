@@ -29,9 +29,12 @@ const propertySchema = new Schema(
     square_feet: { type: Number, required: [true, "Area is required"] },
     amenities: [{ type: String }],
     rates: {
-      nightly: { type: Number, required: [true, "Nightly rate is required"] },
-      weekly: { type: Number },
-      monthly: { type: Number },
+      nightly: {
+        type: Number || null,
+        required: [true, "Nightly rate is required"],
+      },
+      weekly: { type: Number || null },
+      monthly: { type: Number || null },
     },
     seller_info: {
       name: { type: String, required: [true, "Seller name is required"] },
@@ -43,6 +46,13 @@ const propertySchema = new Schema(
   },
   { timestamps: true },
 );
+
+export type PropertyFormData = Omit<
+  PropertyType,
+  "_id" | "owner" | "is_featured" | "createdAt" | "updatedAt" | "images"
+> & {
+  images: File[];
+};
 
 // Define TypeScript type for Property document
 export type PropertyType = InferSchemaType<typeof propertySchema> & {
