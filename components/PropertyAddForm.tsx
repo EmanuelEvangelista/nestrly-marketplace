@@ -39,7 +39,7 @@ const PropertyAddForm = () => {
     if (name.includes(".")) {
       const [outerKey, innerKey] = name.split(".");
 
-      setFields((prevFields) => ({
+      setFields((prevFields: any) => ({
         ...prevFields,
 
         [outerKey]: {
@@ -112,7 +112,7 @@ const PropertyAddForm = () => {
   };
 
   return (
-    <form>
+    <form action="/api/properties" method="POST" encType="multipart/form-data">
       <h2 className="text-3xl text-center font-semibold mb-6">Add Property</h2>
 
       <div className="mb-4">
@@ -218,7 +218,7 @@ const PropertyAddForm = () => {
         <input
           type="text"
           id="zipcode"
-          name="location.zipcode"
+          name="location.zipCode"
           className="border rounded w-full py-2 px-3 mb-2"
           placeholder="Zipcode"
           value={fields.location.zipCode}
@@ -490,7 +490,7 @@ const PropertyAddForm = () => {
               name="amenities"
               value="Coffee Maker"
               className="mr-2"
-              checked={fields.amenities.includes("Coffe Maker")}
+              checked={fields.amenities.includes("Coffee Maker")}
               onChange={handleAmenitiesChange}
             />
 
@@ -563,7 +563,7 @@ const PropertyAddForm = () => {
         <input
           type="text"
           id="seller_name"
-          name="seller_info.name."
+          name="seller_info.name"
           className="border rounded w-full py-2 px-3"
           placeholder="Name"
           value={fields.seller_info.name}
@@ -623,6 +623,7 @@ const PropertyAddForm = () => {
           accept="image/*"
           multiple
           onChange={handleImageChange}
+          required
         />
       </div>
 
