@@ -2,6 +2,7 @@ import connectDB from "@/config/database";
 import { NextRequest, NextResponse } from "next/server";
 import Property from "@/models/Property";
 import { getSessionUser } from "@/utils/getSessionUser";
+import cloudinary from "@/config/cloudinary";
 
 //GET /api/properties
 export const GET = async (request: NextRequest) => {
@@ -82,23 +83,42 @@ export const POST = async (request: NextRequest) => {
         email: formData.get("seller_info.email") as string,
         phone: formData.get("seller_info.phone") as string,
       },
-
       owner: userId,
     };
 
-    console.log("PROPERTY DATA:", propertyData);
+    // 1. Array para guardar las PROMESAS (no las URLs todavía)
+    const imageUploadPromises = [];
 
+    for (const image of images) {
+      const imageBuffer = await image.arrayBuffer();
+      const imageArray = Array.from(new Uint8Array(imageBuffer));
+      const imageData = Buffer.from(imageArray);
+      const imageBase64 = imageData.toString("base64");
+
+      // 2. IMPORTANTE: No usamos await aquí, solo guardamos la promesa
+      const uploadPromise = cloudinary.uploader.upload(
+        `data:image/png;base64,${imageBase64}`,
+        {
+          folder: "nestrly",
+        },
+      );
+      imageUploadPromises.push(uploadPromise);
+    }
+
+    // 3. Esperamos a que TODAS las subidas terminen
+    const uploadResults = await Promise.all(imageUploadPromises);
+
+    // 4. Extraemos solo las secure_url de los resultados de Cloudinary
+    // @ts-ignore (si te da error de tipado con images)
+    propertyData.images = uploadResults.map((result) => result.secure_url);
+
+    // 5. Ahora sí, creamos y guardamos en Mongo
     const newProperty = new Property(propertyData);
     await newProperty.save();
 
     return Response.redirect(
       `${process.env.NEXTAUTH_URL}/properties/${newProperty._id}`,
     );
-
-    //   return NextResponse.json({
-    //     message: "Success",
-    //     status: "200",
-    //   });
   } catch (error) {
     console.error("POST PROPERTY ERROR:", error);
     return NextResponse.json(
