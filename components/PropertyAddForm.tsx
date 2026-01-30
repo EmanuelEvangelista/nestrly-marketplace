@@ -5,27 +5,27 @@ import { PropertyFormData } from "@/models/Property";
 
 const PropertyAddForm = () => {
   const [fields, setFields] = useState<PropertyFormData>({
-    name: "Test Property",
-    type: "Apartment",
+    name: "",
+    type: "",
     description: "",
     location: {
       street: "",
-      city: "Test city",
-      state: "Test state",
+      city: "",
+      state: "",
       zipCode: "",
     },
-    beds: "2",
-    baths: "1",
-    square_feet: "1800",
+    beds: "",
+    baths: "",
+    square_feet: "",
     amenities: [],
     rates: {
       nightly: "",
       weekly: "",
-      monthly: "4000",
+      monthly: "",
     },
     seller_info: {
       name: "",
-      email: "test@test.com",
+      email: "",
       phone: "",
     },
     images: [],
@@ -154,7 +154,7 @@ const PropertyAddForm = () => {
           id="name"
           name="name"
           className="border rounded w-full py-2 px-3 mb-2"
-          placeholder="eg. Beautiful Apartment In Miami"
+          placeholder="eg. Centrally located apartment in New York"
           required
           value={fields.name}
           onChange={handleChange}
