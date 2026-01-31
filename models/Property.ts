@@ -31,7 +31,6 @@ const propertySchema = new Schema(
     rates: {
       nightly: {
         type: Number || null,
-        required: [true, "Nightly rate is required"],
       },
       weekly: { type: Number || null },
       monthly: { type: Number || null },

@@ -7,22 +7,33 @@ import profileDefault from "@/assets/images/profile.png";
 import Spinner from "@/components/Spinner";
 import { toast } from "react-toastify";
 
+interface PropertyProps {
+  _id: string;
+  name: string;
+  images: string[];
+  location: {
+    street: string;
+    city: string;
+    state: string;
+  };
+}
+
 const ProfilePage = () => {
   const { data: session } = useSession();
   const profileImage = session?.user?.image;
   const profileName = session?.user?.name;
   const profileEmail = session?.user?.email;
 
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState<PropertyProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserProperties = async (idUser) => {
+    const fetchUserProperties = async (idUser: string) => {
       try {
         const res = await fetch(`/api/properties/user/${idUser}`);
 
         if (res.status === 200) {
-          const data = await res.json(); // ¡Faltaba el await aquí!
+          const data = (await res.json()) as PropertyProps[];
           setProperties(data);
         }
       } catch (error) {
@@ -38,7 +49,7 @@ const ProfilePage = () => {
     }
   }, [session]); // Dependencia correcta
 
-  const handleDeleteProperty = async (propertyId) => {
+  const handleDeleteProperty = async (propertyId: string) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this property?",
     );
@@ -53,7 +64,7 @@ const ProfilePage = () => {
       if (res.status === 200) {
         // Remove the property from state
         const updatedProperties = properties.filter(
-          (property) => property.id !== propertyId,
+          (property) => property._id !== propertyId,
         );
 
         setProperties(updatedProperties);
