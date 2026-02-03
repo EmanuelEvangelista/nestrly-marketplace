@@ -9,7 +9,7 @@ export const GET = async (request: NextRequest) => {
   try {
     await connectDB();
 
-    const properties = await Property.find({});
+    const properties = await (Property as any).find({});
 
     return NextResponse.json(properties);
   } catch (error) {

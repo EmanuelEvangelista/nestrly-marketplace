@@ -2,28 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import Map from "react-map-gl/maplibre";
-import { Marker } from "react-map-gl/maplibre";
+import { Marker, NavigationControl } from "react-map-gl/maplibre";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Image from "next/image";
 import pin from "@/assets/images/pin.svg";
 import Spinner from "./Spinner";
-
-// Definimos la interfaz para la propiedad
-interface Property {
-  location: {
-    street: string;
-    city: string;
-    state: string;
-    zipCode: string;
-  };
-}
+import { PropertyType } from "@/models/Property";
+import { GeolocateControl } from "react-map-gl/maplibre";
 
 interface PropertyMapProps {
-  property: Property;
+  property: PropertyType;
 }
 
-const PropertyMap: React.FC<PropertyMapProps> = ({ property }) => {
+const PropertyMap = ({ property }: PropertyMapProps) => {
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,10 +36,27 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ property }) => {
         const data = await res.json();
 
         if (data.features && data.features.length > 0) {
-          const [lng, lat] = data.features[0].center;
-          setLat(lat);
-          setLng(lng);
-          setGeocodeError(false);
+          const feature = data.features[0];
+
+          // VALIDACIÓN ESTRICTA:
+          // 1. Que tenga buena relevancia (ej. > 0.8)
+          // 2. Que el tipo de lugar sea 'address' o 'poi' (Punto de interés/casa específica)
+          // Si solo encuentra un 'country' o 'region', lo tomamos como error.
+          const isExactAddress =
+            feature.place_type.includes("address") ||
+            feature.place_type.includes("poi");
+
+          if (feature.relevance > 0.7 && isExactAddress) {
+            const [foundLng, foundLat] = feature.center;
+            setLat(foundLat);
+            setLng(foundLng);
+            setGeocodeError(false);
+          } else {
+            // Si encuentra algo genérico (como todo el país), forzamos el error
+            setLat(null);
+            setLng(null);
+            setGeocodeError(true);
+          }
         } else {
           setGeocodeError(true);
         }
@@ -67,7 +76,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ property }) => {
   if (geocodeError || lat === null || lng === null) {
     return (
       <div className="bg-gray-100 p-4 rounded-lg text-center text-gray-500">
-        No se pudo localizar la dirección en el mapa.
+        The address could not be located on the map.
       </div>
     );
   }
@@ -82,18 +91,14 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ property }) => {
           zoom: 14,
         }}
         style={{ width: "100%", height: "100%" }}
-        // Estilo predeterminado de MapLibre (Gratis y sin Key)
         mapStyle={`https://api.maptiler.com/maps/streets-v4/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`}
       >
+        <NavigationControl position="top-right" visualizePitch />
+
         <Marker longitude={lng} latitude={lat} anchor="bottom">
-          <Image
-            src={pin}
-            alt="Ubicación de la propiedad"
-            width={40}
-            height={40}
-            priority
-          />
+          <Image src={pin} alt="Location" width={40} height={40} priority />
         </Marker>
+        <GeolocateControl position="top-right" trackUserLocation />
       </Map>
     </div>
   );
