@@ -15,6 +15,10 @@ interface PropertyDetailsProps {
 }
 
 const PropertyDetails = ({ property }: PropertyDetailsProps) => {
+  if (!property || !property.location) {
+    return <p>Cargando datos de la propiedad...</p>;
+  }
+
   return (
     <main>
       <div className="bg-white p-6 rounded-lg shadow-md text-center md:text-left">

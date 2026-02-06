@@ -15,6 +15,11 @@ interface PropertyShareButtonProps {
 }
 
 const ShareButtons = ({ property }: PropertyShareButtonProps) => {
+  // 1. Validación de seguridad al inicio
+  if (!property || !property.type) {
+    return null;
+  }
+
   const shareUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property._id}`;
   return (
     <>
@@ -31,7 +36,7 @@ const ShareButtons = ({ property }: PropertyShareButtonProps) => {
         <TwitterShareButton
           url={shareUrl}
           title={property.name}
-          hashtags={[`#${property.type.replace(/\s/g, "")}ForRent`]}
+          hashtags={[`${property.type.replace(/\s/g, "")}ForRent`]}
         >
           <TwitterIcon size={40} round={true} />
         </TwitterShareButton>

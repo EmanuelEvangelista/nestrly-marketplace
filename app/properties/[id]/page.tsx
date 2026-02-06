@@ -35,7 +35,7 @@ const PropertyPage = () => {
     if (property === null) {
       fetchPropertyData();
     }
-  }, [id, property]);
+  }, [id]);
 
   if (!property && !loading) {
     return (

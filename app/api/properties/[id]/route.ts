@@ -2,6 +2,7 @@ import connectDB from "@/config/database";
 import { NextRequest, NextResponse } from "next/server";
 import Property from "@/models/Property";
 import { getSessionUser } from "@/utils/getSessionUser";
+import mongoose from "mongoose";
 
 type Props = {
   params: Promise<{ id: string }>; // Importante: Es una Promesa
@@ -9,10 +10,16 @@ type Props = {
 
 //GET /api/properties/:id
 export const GET = async (request: NextRequest, { params }: Props) => {
-  const { id } = await params;
-
   try {
     await connectDB();
+
+    const { id } = await params;
+
+    // SI EL ID NO ES UN OBJECTID VÁLIDO DE MONGO (como la palabra "search")
+    // DETENEMOS LA EJECUCIÓN AQUÍ MISMO
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+    }
 
     const property = await Property.findById(id);
 

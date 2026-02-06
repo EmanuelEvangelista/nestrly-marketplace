@@ -3,9 +3,14 @@ import { useState, useEffect } from "react";
 import PropertyCard from "@/components/PropertyCard";
 import Spinner from "@/components/Spinner";
 import { toast } from "react-toastify";
+import { PropertyType } from "@/models/Property";
 
-const savedPropertiesPage = () => {
-  const [properties, setProperties] = useState([]);
+interface PropertySavedProps {
+  property: PropertyType;
+}
+
+const SavedPropertiesPage = ({ property }: PropertySavedProps) => {
+  const [properties, setProperties] = useState<PropertyType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,4 +57,4 @@ const savedPropertiesPage = () => {
   );
 };
 
-export default savedPropertiesPage;
+export default SavedPropertiesPage;
