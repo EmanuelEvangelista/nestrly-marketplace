@@ -5,6 +5,42 @@ import { getSessionUser } from "@/utils/getSessionUser";
 
 export const dynamic = "force-dynamic";
 
+// GET /api/messages
+
+export const GET = async () => {
+  try {
+    await connectDB();
+
+    const sessionUser = await getSessionUser();
+
+    if (!sessionUser || !sessionUser.userId) {
+      return NextResponse.json(
+        { message: "User ID is required" },
+        {
+          status: 401,
+        },
+      );
+    }
+
+    const { userId } = sessionUser;
+
+    const messages = await Message.find({ recipient: userId })
+      .sort({ createdAt: -1 })
+      .populate("sender", "username")
+      .populate("property", "name");
+
+    return NextResponse.json(messages, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      {
+        status: 500,
+      },
+    );
+  }
+};
+
 // POST /api/messages
 export const POST = async (request: NextRequest) => {
   try {

@@ -1,19 +1,6 @@
-import { Schema, model, models, Model, Types } from "mongoose";
+import { Schema, model, models, Model, InferSchemaType, Types } from "mongoose";
 
-export interface IMessage {
-  sender: Types.ObjectId; // Referencia al usuario que envía
-  recipient: Types.ObjectId; // Referencia al usuario que recibe
-  property: Types.ObjectId; // Referencia a la propiedad en cuestión
-  name: string;
-  email: string;
-  phone?: string; // Opcional con ? porque no tiene 'required: true'
-  body?: string; // Opcional
-  red: boolean;
-  createdAt?: Date; // Añadido por timestamps: true
-  updatedAt?: Date; // Añadido por timestamps: true
-}
-
-const messageSchema = new Schema<IMessage>(
+const messageSchema = new Schema(
   {
     sender: {
       type: Schema.Types.ObjectId,
@@ -44,7 +31,7 @@ const messageSchema = new Schema<IMessage>(
     body: {
       type: String,
     },
-    red: {
+    read: {
       type: Boolean,
       default: false,
     },
@@ -54,8 +41,24 @@ const messageSchema = new Schema<IMessage>(
   },
 );
 
+// Obtenemos el tipo base
+type MessageBaseType = InferSchemaType<typeof messageSchema>;
+
+// Creamos un tipo que sea amigable con el Frontend (donde los IDs llegan como strings)
+export type MessageType = Omit<
+  MessageBaseType,
+  "sender" | "recipient" | "property"
+> & {
+  _id: string; // InferSchemaType a veces no incluye el _id explícitamente como string
+  sender: string | Types.ObjectId;
+  recipient: string | Types.ObjectId;
+  property: string | Types.ObjectId;
+  createdAt: string; // Los timestamps llegan como ISO strings al cliente
+  updatedAt: string;
+};
+
 const Message =
-  (models.Message as Model<IMessage>) ||
-  model<IMessage>("Message", messageSchema);
+  (models.Message as Model<MessageType>) ||
+  model<MessageType>("Message", messageSchema);
 
 export default Message;
