@@ -5,6 +5,7 @@ import "@/assets/styles/globals.css";
 import { Metadata } from "next";
 import AuthProvider from "@/components/AuthProvider";
 import { ToastContainer } from "react-toastify";
+import { GlobalProvider } from "@/context/GlobalContext";
 import "react-toastify/dist/ReactToastify.css";
 import "@/assets/styles/globals.css";
 
@@ -20,16 +21,18 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <AuthProvider>
-      <html lang="en">
-        <body>
-          <NavBar />
-          <main>{children}</main>
-          <Footer />
-          <ToastContainer />
-        </body>
-      </html>
-    </AuthProvider>
+    <GlobalProvider>
+      <AuthProvider>
+        <html lang="en">
+          <body>
+            <NavBar />
+            <main>{children}</main>
+            <Footer />
+            <ToastContainer />
+          </body>
+        </html>
+      </AuthProvider>
+    </GlobalProvider>
   );
 };
 

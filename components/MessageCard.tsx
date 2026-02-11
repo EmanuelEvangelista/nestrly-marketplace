@@ -2,13 +2,18 @@
 import { MessageType } from "@/models/Message";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 interface MessageTypeProps {
   message: MessageType;
+  prevCount: any;
 }
 
 const MessageCard = ({ message }: MessageTypeProps) => {
   const [isRead, setIsRead] = useState(message.read);
+  const [isDeleted, setIsDeleted] = useState(false);
+
+  const { setUnreadCount } = useGlobalContext();
 
   const handleReadClick = async () => {
     try {
@@ -19,6 +24,7 @@ const MessageCard = ({ message }: MessageTypeProps) => {
       if (res.status === 200) {
         const { read } = await res.json();
         setIsRead(read);
+        setUnreadCount((prevCount) => (read ? prevCount - 1 : prevCount + 1));
         if (read) {
           toast.success("Marked as read");
         } else {
@@ -30,6 +36,26 @@ const MessageCard = ({ message }: MessageTypeProps) => {
       toast.error("Someting went wrong");
     }
   };
+
+  const handleDeleteClick = async () => {
+    try {
+      const res = await fetch(`/api/messages/${message._id}`, {
+        method: "DELETE",
+      });
+
+      if (res.status === 200) {
+        setIsDeleted(true);
+        setUnreadCount((prevCount) => prevCount - 1);
+        toast.success("Messages deleted");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Someting went wrong");
+    }
+  };
+  if (isDeleted) {
+    return null;
+  }
 
   return (
     <div>
@@ -75,7 +101,10 @@ const MessageCard = ({ message }: MessageTypeProps) => {
         >
           {isRead ? "Mark As New" : "Mark As Read"}
         </button>
-        <button className="mt-4 bg-red-500 text-white py-1 px-3 rounded-md">
+        <button
+          onClick={handleDeleteClick}
+          className="mt-4 bg-red-500 text-white py-1 px-3 rounded-md cursor-pointer transition duration-200"
+        >
           Delete
         </button>
       </div>

@@ -69,3 +69,58 @@ export const PUT = async (request: NextRequest, { params }: Props) => {
     );
   }
 };
+
+// DELETE /api/message/:id
+export const DELETE = async (request: NextRequest, { params }: Props) => {
+  const { id } = await params;
+
+  try {
+    await connectDB();
+
+    // En cada lugar que quiera obtener los datos del usuario que inicio session tengo que usar estas lineas
+    const sessionUser = await getSessionUser();
+
+    if (!sessionUser || !sessionUser.userId) {
+      return NextResponse.json(
+        { error: "User Id is required" },
+        {
+          status: 404,
+        },
+      );
+    }
+
+    const { userId } = sessionUser;
+    // Hasta áca
+
+    // Get property to update
+    const message = await Message.findById(id);
+
+    if (!message) {
+      return NextResponse.json(
+        { message: "Message not found" },
+        {
+          status: 404,
+        },
+      );
+    }
+
+    // Verify ownership
+    if (message.recipient.toString() !== userId) {
+      return NextResponse.json(
+        { error: "Message not found" },
+        {
+          status: 401,
+        },
+      );
+    }
+
+    await message.deleteOne();
+
+    return NextResponse.json(message, {
+      status: 200,
+    });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: "Message deleted" }, { status: 500 });
+  }
+};

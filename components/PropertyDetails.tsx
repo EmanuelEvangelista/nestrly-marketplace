@@ -1,4 +1,3 @@
-import React from "react";
 import { PropertyType } from "@/models/Property";
 import {
   FaBed,
@@ -9,6 +8,7 @@ import {
   FaMapMarker,
 } from "react-icons/fa";
 import PropertyMap from "@/components/PropertyMap";
+import PropertyWeatherCard from "@/components/PropertyWeatherCard";
 
 interface PropertyDetailsProps {
   property: PropertyType;
@@ -103,6 +103,9 @@ const PropertyDetails = ({ property }: PropertyDetailsProps) => {
       </div>
       <div className="bg-white p-6 rounded-lg shadow-md mt-6">
         <PropertyMap property={property} />
+      </div>
+      <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+        <PropertyWeatherCard property={property} />
       </div>
     </main>
   );

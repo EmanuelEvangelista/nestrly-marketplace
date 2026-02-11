@@ -7,8 +7,7 @@ import profileDefault from "@/assets/images/profile.png";
 import { FaGoogle, FaBars, FaBell } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
-import { profile } from "node:console";
-import { set } from "mongoose";
+import UnreadMessageCount from "@/components/UnreadMessageCount";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -123,11 +122,9 @@ const Navbar = () => {
                 >
                   <span className="absolute -inset-1.5"></span>
                   <span className="sr-only">View notifications</span>
+                  <UnreadMessageCount session={session} />
                   <FaBell className="h-6 w-6" />
                 </button>
-                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                  2
-                </span>
               </Link>
 
               <div className="relative ml-3">
