@@ -1,7 +1,9 @@
 import { PropertyType } from "@/models/Property";
 
 //Fetch all properties from the API
-async function fetchProperties(): Promise<PropertyType[]> {
+async function fetchProperties({ showFeatured = false } = {}): Promise<
+  PropertyType[]
+> {
   const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null;
 
   try {
@@ -10,7 +12,10 @@ async function fetchProperties(): Promise<PropertyType[]> {
       return [];
     }
 
-    const res = await fetch(`${apiDomain}/properties`);
+    const res = await fetch(
+      `${apiDomain}/properties${showFeatured ? "/featured" : ""}`,
+      { cache: "no-store" },
+    );
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");

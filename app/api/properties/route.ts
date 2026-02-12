@@ -9,9 +9,23 @@ export const GET = async (request: NextRequest) => {
   try {
     await connectDB();
 
-    const properties = await (Property as any).find({});
+    const page = Number(request.nextUrl.searchParams.get("page")) || 1;
+    const pageSize = Number(request.nextUrl.searchParams.get("pageSize")) || 6;
 
-    return NextResponse.json(properties);
+    const skip = (page - 1) * pageSize;
+
+    const total = await Property.countDocuments({});
+    const properties = await (Property as any)
+      .find({})
+      .skip(skip)
+      .limit(pageSize);
+
+    const result = {
+      total,
+      properties,
+    };
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error("Database connection error:", error);
     return NextResponse.json(
@@ -116,7 +130,7 @@ export const POST = async (request: NextRequest) => {
     const newProperty = new Property(propertyData);
     await newProperty.save();
 
-    return Response.redirect(
+    return NextResponse.redirect(
       `${process.env.NEXTAUTH_URL}/properties/${newProperty._id}`,
     );
   } catch (error) {
