@@ -3,33 +3,39 @@ import InfoBox from "@/components/InfoBox";
 
 const InfoBoxes = () => {
   return (
-    <section>
-      <div className="container-xl lg:container m-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg">
+    <section className="py-24 bg-gradient-to-b from-[#0f172a] via-[#172554] to-[#1e1b4b]">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <InfoBox
-            heading="For Renters"
-            backgroundColor="bg-gray-100"
+            heading="Looking for a Place?"
+            backgroundColor="bg-[#1e293b] border border-slate-600"
             buttonInfo={{
-              text: "Browse Properties",
+              text: "Explore Rentals",
               link: "/properties",
-              backgroundColor: "bg-black",
+              backgroundColor: "bg-indigo-500 hover:bg-indigo-600 text-white",
             }}
           >
-            Find your dream rental property. Bookmark properties and contact
-            owners.
+            <span className="text-slate-200">
+              Discover modern apartments and homes that match your lifestyle.
+              Compare options, save favorites, and connect directly with
+              verified owners.
+            </span>
           </InfoBox>
 
           <InfoBox
-            heading="For Property Owners"
-            backgroundColor="bg-blue-100"
+            heading="Own a Property?"
+            backgroundColor="bg-[#1e293b] border border-slate-600"
             buttonInfo={{
-              text: "Add Property",
+              text: "List Your Property",
               link: "/properties/add",
-              backgroundColor: "bg-blue-500",
+              backgroundColor: "bg-cyan-500 hover:bg-cyan-600 text-black",
             }}
           >
-            List your properties and reach potential tenants. Rent as an airbnb
-            or long term.
+            <span className="text-slate-200">
+              Start earning from your property today. Publish your listing in
+              minutes and reach serious tenants actively searching for their
+              next home.
+            </span>
           </InfoBox>
         </div>
       </div>

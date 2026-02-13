@@ -1,3 +1,4 @@
+"use client";
 import { PropertyType } from "@/models/Property";
 import {
   FaBed,
@@ -6,24 +7,40 @@ import {
   FaTimes,
   FaCheck,
   FaMapMarker,
+  FaEye,
 } from "react-icons/fa";
 import PropertyMap from "@/components/PropertyMap";
 import PropertyWeatherCard from "@/components/PropertyWeatherCard";
+import PropertyView from "@/components/PropertyView";
+import { useSession } from "next-auth/react";
 
 interface PropertyDetailsProps {
   property: PropertyType;
 }
 
 const PropertyDetails = ({ property }: PropertyDetailsProps) => {
+  const { data: session } = useSession(); // 2. Obtener la sesión
+
   if (!property || !property.location) {
     return <p>Cargando datos de la propiedad...</p>;
   }
+
+  // 3. Verificar si el usuario actual es el dueño
+  const isOwner = session?.user?.id === property.owner.toString();
 
   return (
     <main>
       <div className="bg-white p-6 rounded-lg shadow-md text-center md:text-left">
         <div className="text-gray-500 mb-4">{property.type}</div>
         <h1 className="text-3xl font-bold mb-4">{property.name}</h1>
+        {/* 4. Mostrar el contador solo al dueño */}
+        {isOwner && (
+          <div className="top-4 right-4 w-fit inline-flex items-center bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm mb-4">
+            <FaEye className="mr-1" />
+            <span>{property.views || 0} views (Private)</span>
+          </div>
+        )}
+
         <div className="text-gray-500 mb-4 flex align-middle justify-center md:justify-start">
           <FaMapMarker className="text-lg text-orange-700 mr-2" />
           <p className="text-orange-700">
@@ -31,7 +48,6 @@ const PropertyDetails = ({ property }: PropertyDetailsProps) => {
             {property.location.state}
           </p>
         </div>
-
         <h3 className="text-lg font-bold my-6 bg-gray-800 text-white p-2">
           Rates & Options
         </h3>

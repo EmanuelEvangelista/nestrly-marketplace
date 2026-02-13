@@ -30,61 +30,71 @@ const Navbar = () => {
   console.log(profileImage);
 
   return (
-    <nav className="bg-[#0f172a] border-b border-blue-500">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <nav className="bg-[#0f172a] border-b border-white/10 backdrop-blur-md fixed top-0 left-0 w-full z-50">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="relative flex h-20 items-center justify-between">
+          {/* Mobile button */}
           <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
             <button
               type="button"
               id="mobile-dropdown-button"
-              className="relative inline-flex items-center justify-center rounded-md p-2 text-yellow-400 hover:bg-yellow-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className="inline-flex items-center justify-center rounded-xl p-2 text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30"
               aria-controls="mobile-menu"
               aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen((prev) => !prev)}
             >
-              <span className="absolute -inset-0.5"></span>
               <span className="sr-only">Open main menu</span>
-              <FaBars className="block h-6 w-6" />
+              <FaBars className="h-6 w-6" />
             </button>
           </div>
 
+          {/* Logo */}
           <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
-            <Link className="flex flex-shrink-0 items-center" href="/">
+            <Link className="flex items-center space-x-3" href="/">
               <Image
-                className="h-14 w-auto"
+                className="h-12 w-auto"
                 src={logo}
                 alt="Nestrly"
                 priority
               />
-              <span className="hidden md:block text-white text-3xl font-bold ml-2">
+              <span className="hidden md:block text-white text-2xl font-semibold tracking-wide">
                 Nestrly
               </span>
             </Link>
 
-            <div className="hidden md:ml-6 md:flex items-center">
-              <div className="flex space-x-2">
+            {/* Desktop Links */}
+            <div className="hidden md:ml-10 md:flex items-center">
+              <div className="flex space-x-1 bg-white/5 p-1 rounded-xl">
                 <Link
                   href="/"
                   className={`${
-                    pathname === "/" ? "bg-yellow-900" : ""
-                  } text-white hover:bg-yellow-900 rounded-md px-3 py-2`}
+                    pathname === "/"
+                      ? "bg-white/10 text-white"
+                      : "text-slate-300"
+                  } px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10 hover:text-white`}
                 >
                   Home
                 </Link>
+
                 <Link
                   href="/properties"
                   className={`${
-                    pathname === "/properties" ? "bg-yellow-900" : ""
-                  } text-white hover:bg-yellow-900 rounded-md px-3 py-2`}
+                    pathname === "/properties"
+                      ? "bg-white/10 text-white"
+                      : "text-slate-300"
+                  } px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10 hover:text-white`}
                 >
                   Properties
                 </Link>
+
                 {session && (
                   <Link
                     href="/properties/add"
                     className={`${
-                      pathname === "/properties/add" ? "bg-yellow-900" : ""
-                    } text-white hover:bg-yellow-900 rounded-md px-3 py-2`}
+                      pathname === "/properties/add"
+                        ? "bg-orange-500 text-white"
+                        : "text-orange-400"
+                    } px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-orange-500 hover:text-white`}
                   >
                     Add Property
                   </Link>
@@ -93,7 +103,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Menú derecha Logged Out */}
+          {/* Logged Out */}
           {!session && (
             <div className="hidden md:block md:ml-6">
               <div className="flex items-center">
@@ -102,74 +112,69 @@ const Navbar = () => {
                     <button
                       onClick={() => signIn(provider.id)}
                       key={index}
-                      className="flex items-center text-white bg-yellow-700 hover:bg-yellow-900 hover:text-white rounded-md px-3 py-2"
+                      className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl font-medium shadow-lg shadow-orange-500/20 transition-all duration-200"
                     >
-                      <FaGoogle className="text-white mr-2" />
-                      <span>Login or Register</span>
+                      <FaGoogle className="text-white" />
+                      Login
                     </button>
                   ))}
               </div>
             </div>
           )}
 
-          {/* Menú derecha Logged In */}
+          {/* Logged In */}
           {session && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
-              <Link href="/messages" className="relative group">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0 space-x-4">
+              <Link href="/messages">
                 <button
                   type="button"
-                  className="relative rounded-full bg-yellow-800 p-1 text-yellow-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-yellow-800"
+                  className="relative rounded-xl bg-white/5 p-2 text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-200"
                 >
-                  <span className="absolute -inset-1.5"></span>
-                  <span className="sr-only">View notifications</span>
                   <UnreadMessageCount session={session} />
-                  <FaBell className="h-6 w-6" />
+                  <FaBell className="h-5 w-5" />
                 </button>
               </Link>
 
-              <div className="relative ml-3">
+              <div className="relative">
                 <button
                   type="button"
-                  className="relative flex rounded-full bg-yellow-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-yellow-800"
+                  className="flex rounded-full ring-2 ring-white/10 hover:ring-orange-500 transition-all duration-200"
                   id="user-menu-button"
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                 >
-                  <span className="absolute -inset-1.5"></span>
                   <Image
-                    className="h-8 w-8 rounded-full"
+                    className="h-9 w-9 rounded-full"
                     src={profileImage}
                     alt="User Profile"
-                    width={32}
-                    height={32}
+                    width={36}
+                    height={36}
                   />
                 </button>
 
                 {isProfileMenuOpen && (
-                  <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="absolute right-0 z-10 mt-3 w-52 rounded-xl bg-[#111827] border border-white/10 shadow-2xl py-2">
                     <Link
                       href="/profile"
-                      className="block px-4 py-2 text-sm text-yellow-700"
-                      onClick={() => {
-                        setIsProfileMenuOpen(false);
-                      }}
+                      className="block px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition"
+                      onClick={() => setIsProfileMenuOpen(false)}
                     >
                       Your Profile
                     </Link>
+
                     <Link
                       href="/properties/saved"
-                      className="block px-4 py-2 text-sm text-yellow-700"
-                      onClick={() => {
-                        setIsProfileMenuOpen(false);
-                      }}
+                      className="block px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition"
+                      onClick={() => setIsProfileMenuOpen(false)}
                     >
                       Saved Properties
                     </Link>
+
                     <button
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         signOut();
                       }}
-                      className="block w-full text-left px-4 py-2 text-sm text-yellow-700"
+                      className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition"
                     >
                       Sign Out
                     </button>
@@ -181,46 +186,49 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Menú Móvil */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div id="mobile-menu">
-          <div className="space-y-1 px-2 pb-3 pt-2">
+        <div id="mobile-menu" className="md:hidden px-4 pb-6">
+          <div className="space-y-2 mt-4 bg-white/5 rounded-2xl p-4 border border-white/10">
             <Link
               href="/"
               className={`${
-                pathname === "/" ? "bg-yellow-900" : ""
-              } text-white block rounded-md px-3 py-2 text-base font-medium`}
+                pathname === "/" ? "bg-white/10 text-white" : "text-slate-300"
+              } block px-4 py-2 rounded-lg text-sm font-medium transition hover:bg-white/10`}
             >
               Home
             </Link>
+
             <Link
               href="/properties"
               className={`${
-                pathname === "/properties" ? "bg-yellow-900" : ""
-              } text-white block rounded-md px-3 py-2 text-base font-medium`}
+                pathname === "/properties"
+                  ? "bg-white/10 text-white"
+                  : "text-slate-300"
+              } block px-4 py-2 rounded-lg text-sm font-medium transition hover:bg-white/10`}
             >
               Properties
             </Link>
+
             {session && (
               <Link
                 href="/properties/add"
-                className={`${
-                  pathname === "/properties/add" ? "bg-yellow-900" : ""
-                } text-white block rounded-md px-3 py-2 text-base font-medium`}
+                className="block px-4 py-2 rounded-lg text-sm font-medium text-orange-400 hover:bg-orange-500 hover:text-white transition"
               >
                 Add Property
               </Link>
             )}
+
             {!session &&
               providers &&
               Object.values(providers).map((provider, index) => (
                 <button
                   onClick={() => signIn(provider.id)}
                   key={index}
-                  className="flex items-center text-white bg-yellow-700 hover:bg-yellow-900 hover:text-white rounded-md px-3 py-2 my-2"
+                  className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl font-medium w-full justify-center transition"
                 >
-                  <FaGoogle className="text-white mr-2" />
-                  <span>Login or Register</span>
+                  <FaGoogle />
+                  Login
                 </button>
               ))}
           </div>

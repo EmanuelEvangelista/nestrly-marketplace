@@ -52,6 +52,7 @@ const propertySchema = new Schema(
     },
     images: [{ type: String }],
     is_featured: { type: Boolean, default: false },
+    views: { type: Number, default: 0 },
   },
   { timestamps: true },
 );

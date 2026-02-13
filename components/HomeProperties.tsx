@@ -12,14 +12,25 @@ const HomeProperties = async () => {
 
   return (
     <>
-      <section className="px-4 py-6">
-        <div className="container-xl lg:container m-auto">
-          <h2 className="text-3xl font-bold text-blue-500 mb-6 text-center">
-            Recent Properties
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="px-6 py-24 bg-gradient-to-b from-white via-slate-50 to-blue-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+              <span className="text-slate-800">Latest</span>{" "}
+              <span className="text-indigo-600">Listings</span>
+            </h2>
+
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+              Stay updated with the newest properties added to our platform.
+              Fresh opportunities, ready for you.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {recentProperties.length === 0 ? (
-              <p>No properties available</p>
+              <p className="text-center text-slate-500 col-span-3">
+                No properties available at the moment.
+              </p>
             ) : (
               recentProperties.map((property) => (
                 <PropertyCard key={property._id} property={property} />
@@ -28,13 +39,20 @@ const HomeProperties = async () => {
           </div>
         </div>
       </section>
-      <section className="m-auto max-w-lg my-10 px-6">
-        <Link
-          href="/properties"
-          className="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
-        >
-          View All Properties
-        </Link>
+
+      <section className="bg-gradient-to-b from-blue-50 to-white py-16">
+        <div className="max-w-lg mx-auto px-6">
+          <Link
+            href="/properties"
+            className="block text-center py-4 px-8 rounded-2xl font-semibold
+                 bg-indigo-600 text-white
+                 hover:bg-indigo-700
+                 transition-all duration-300
+                 shadow-lg shadow-indigo-500/20"
+          >
+            Explore All Properties
+          </Link>
+        </div>
       </section>
     </>
   );
