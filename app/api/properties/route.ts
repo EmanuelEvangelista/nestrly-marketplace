@@ -87,9 +87,15 @@ export const POST = async (request: NextRequest) => {
       amenities,
 
       rates: {
-        weekly: Number(formData.get("rates.weekly")),
-        monthly: Number(formData.get("rates.monthly")),
-        nightly: Number(formData.get("rates.nightly")),
+        weekly: formData.get("rates.weekly")
+          ? Number(formData.get("rates.weekly"))
+          : null,
+        monthly: formData.get("rates.monthly")
+          ? Number(formData.get("rates.monthly"))
+          : null,
+        nightly: formData.get("rates.nightly")
+          ? Number(formData.get("rates.nightly"))
+          : null,
       },
 
       seller_info: {

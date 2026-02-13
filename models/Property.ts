@@ -30,10 +30,20 @@ const propertySchema = new Schema(
     amenities: [{ type: String }],
     rates: {
       nightly: {
-        type: Number || null,
+        type: Number,
+        required: false,
+        default: null,
       },
-      weekly: { type: Number || null },
-      monthly: { type: Number || null },
+      weekly: {
+        type: Number,
+        required: false,
+        default: null,
+      },
+      monthly: {
+        type: Number,
+        required: false,
+        default: null,
+      },
     },
     seller_info: {
       name: { type: String, required: [true, "Seller name is required"] },
