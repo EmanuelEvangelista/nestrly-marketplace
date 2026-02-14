@@ -2,10 +2,13 @@ import connectDB from "@/config/database";
 import Property from "@/models/Property";
 import { NextResponse, NextRequest } from "next/server";
 
-export const PATCH = async (request: NextRequest, { params }) => {
+export const PATCH = async (
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) => {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
 
     const property = await Property.findById(id);
 
