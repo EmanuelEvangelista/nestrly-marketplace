@@ -6,9 +6,9 @@ import { PropertyType } from "@/models/Property";
 const HomeProperties = async () => {
   const data: any = await fetchProperties();
 
-  const recentProperties = data.properties
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 3);
+  const recentProperties = Array.isArray(data?.properties)
+    ? [...data.properties].sort(() => 0.5 - Math.random()).slice(0, 3)
+    : [];
 
   return (
     <>
