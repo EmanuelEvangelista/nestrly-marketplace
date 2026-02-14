@@ -36,6 +36,7 @@ const PropertyEditForm = () => {
       email: "",
       phone: "",
     },
+    views: 0,
   });
 
   const [loading, setLoading] = useState(true);
