@@ -29,6 +29,7 @@ const PropertyAddForm = () => {
       phone: "",
     },
     images: [],
+    views: 0,
   });
 
   const handleChange = (e: any) => {
