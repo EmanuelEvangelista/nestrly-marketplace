@@ -6,7 +6,7 @@ import { useGlobalContext } from "@/context/GlobalContext";
 
 interface MessageTypeProps {
   message: MessageType;
-  prevCount: any;
+  prevCount?: any;
 }
 
 const MessageCard = ({ message }: MessageTypeProps) => {
