@@ -96,16 +96,18 @@ const BookMarkButton = ({ property }: PropertyBookMarkProps) => {
   return isBookmarked ? (
     <button
       onClick={handleClick}
-      className="bg-red-500 hover:bg-red-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center"
+      className="bg-rose-500 hover:bg-rose-600 text-white font-semibold w-full py-2.5 px-4 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md"
     >
-      <FaBookmark className="fas fa-bookmark mr-2" /> Remove Bookmark
+      <FaBookmark className="mr-2" />
+      Remove Bookmark
     </button>
   ) : (
     <button
       onClick={handleClick}
-      className="bg-blue-500 hover:bg-blue-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center"
+      className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold w-full py-2.5 px-4 rounded-xl flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md"
     >
-      <FaRegBookmark className="fas fa-bookmark mr-2" /> Bookmark Property
+      <FaRegBookmark className="mr-2" />
+      Bookmark Property
     </button>
   );
 };

@@ -11,14 +11,18 @@ import {
 } from "react-icons/fa";
 import PropertyMap from "@/components/PropertyMap";
 import PropertyWeatherCard from "@/components/PropertyWeatherCard";
-import PropertyView from "@/components/PropertyView";
 import { useSession } from "next-auth/react";
+import PropertyView from "@/components/PropertyView";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface PropertyDetailsProps {
   property: PropertyType;
 }
 
 const PropertyDetails = ({ property }: PropertyDetailsProps) => {
+  const [views, setViews] = useState(property.views || 0);
+
   const { data: session } = useSession(); // 2. Obtener la sesión
 
   if (!property || !property.location) {
@@ -28,16 +32,46 @@ const PropertyDetails = ({ property }: PropertyDetailsProps) => {
   // 3. Verificar si el usuario actual es el dueño
   const isOwner = session?.user?.id === property.owner.toString();
 
+  const handleResetViews = async () => {
+    if (
+      !confirm("¿Estás seguro de que quieres reiniciar el contador de vistas?")
+    )
+      return;
+
+    try {
+      const res = await fetch(`/api/properties/${property._id}/view/reset`, {
+        method: "PATCH",
+      });
+
+      if (res.ok) {
+        setViews(0);
+        toast.success("Contador reiniciado");
+      }
+    } catch (error) {
+      toast.error("No se pudo reiniciar el contador");
+    }
+  };
+
   return (
     <main>
       <div className="bg-white p-6 rounded-lg shadow-md text-center md:text-left">
         <div className="text-gray-500 mb-4">{property.type}</div>
         <h1 className="text-3xl font-bold mb-4">{property.name}</h1>
+        <PropertyView property={property} />
         {/* 4. Mostrar el contador solo al dueño */}
         {isOwner && (
-          <div className="top-4 right-4 w-fit inline-flex items-center bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm mb-4">
-            <FaEye className="mr-1" />
-            <span>{property.views || 0} views (Private)</span>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center shadow-sm">
+              <FaEye className="mr-1" />
+              <span>{property.views || 0} views (Private)</span>
+            </div>
+
+            <button
+              onClick={handleResetViews}
+              className="text-xs text-red-600 hover:text-red-800 font-medium underline cursor-pointer"
+            >
+              Reset views
+            </button>
           </div>
         )}
 

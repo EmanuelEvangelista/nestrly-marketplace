@@ -59,26 +59,25 @@ const PropertyConctactForm = ({ property }: PropertyFormContactProps) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-xl font-bold mb-6">Contact Property Manager</h3>
+    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mt-6">
+      <h3 className="text-xl font-semibold mb-6 text-gray-800">
+        Contact Property Manager
+      </h3>
+
       {!session ? (
-        <p>You must be logged in to sent a message</p>
+        <p className="text-gray-500">You must be logged in to send a message</p>
       ) : wasSubmitted ? (
-        <p className="text-green-500 mb-4">
-          Your message has been sent success
+        <p className="text-emerald-600 font-medium mb-4">
+          Your message has been sent successfully
         </p>
       ) : (
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="name"
-            >
-              Name:
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-600 text-sm font-medium mb-2">
+              Name
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="name"
+              className="w-full border border-gray-200 rounded-xl py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
               type="text"
               placeholder="Enter your name"
               required
@@ -86,16 +85,13 @@ const PropertyConctactForm = ({ property }: PropertyFormContactProps) => {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email:
+
+          <div>
+            <label className="block text-gray-600 text-sm font-medium mb-2">
+              Email
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
+              className="w-full border border-gray-200 rounded-xl py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
               type="email"
               placeholder="Enter your email"
               required
@@ -103,45 +99,39 @@ const PropertyConctactForm = ({ property }: PropertyFormContactProps) => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="phone"
-            >
-              Phone:
+
+          <div>
+            <label className="block text-gray-600 text-sm font-medium mb-2">
+              Phone
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="phone"
+              className="w-full border border-gray-200 rounded-xl py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
               type="text"
               placeholder="Enter your phone number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="message"
-            >
-              Message:
+
+          <div>
+            <label className="block text-gray-600 text-sm font-medium mb-2">
+              Message
             </label>
             <textarea
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-44 focus:outline-none focus:shadow-outline"
-              id="message"
+              className="w-full border border-gray-200 rounded-xl py-2.5 px-3 text-gray-700 h-40 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
               placeholder="Enter your message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             ></textarea>
           </div>
-          <div>
-            <button
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline flex items-center justify-center"
-              type="submit"
-            >
-              <FaPaperPlane className="mr-2" /> Send Message
-            </button>
-          </div>
+
+          <button
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-xl w-full flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md"
+            type="submit"
+          >
+            <FaPaperPlane className="mr-2" />
+            Send Message
+          </button>
         </form>
       )}
     </div>
