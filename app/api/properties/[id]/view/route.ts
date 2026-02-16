@@ -4,27 +4,30 @@ import { NextResponse, NextRequest } from "next/server";
 
 export const PATCH = async (
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: { id: string } },
 ) => {
   try {
     await connectDB();
-    const { id } = await params;
 
-    const property = await Property.findById(id);
+    const { id } = params;
 
-    if (!property) {
+    const updatedProperty = await Property.findByIdAndUpdate(
+      id,
+      { $inc: { views: 1 } },
+      { new: true },
+    );
+
+    if (!updatedProperty) {
       return NextResponse.json(
         { message: "Property not found" },
         { status: 404 },
       );
     }
 
-    // Incrementamos el contador de vistas
-    property.views = (property.views || 0) + 1;
-    await property.save();
-
-    return NextResponse.json({ views: property.views }, { status: 200 });
+    return NextResponse.json({ views: updatedProperty.views }, { status: 200 });
   } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
       { message: "Error updating views" },
       { status: 500 },
