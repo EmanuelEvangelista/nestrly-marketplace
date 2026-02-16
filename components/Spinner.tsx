@@ -1,5 +1,5 @@
 "use client";
-import ClipLoader from "react-spinners/ClipLoader";
+import PulseLoader from "react-spinners/PulseLoader";
 import React from "react";
 
 interface LoadingProps {
@@ -14,14 +14,16 @@ const override: React.CSSProperties = {
 
 const Spinner = ({ loading }: LoadingProps) => {
   return (
-    <ClipLoader
-      color="#3b82f6"
-      loading={loading}
-      cssOverride={override}
-      size={150}
-      aria-label="Loading Spinner"
-      data-testid="loader"
-    />
+    <div className="flex justify-center items-center w-full">
+      <PulseLoader
+        color="#3b82f6"
+        loading={loading}
+        cssOverride={override}
+        size={20} // Tamaño mucho más estético para puntos
+        margin={5} // Espacio entre los puntos
+        aria-label="Loading Spinner"
+      />
+    </div>
   );
 };
 

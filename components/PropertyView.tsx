@@ -1,42 +1,46 @@
+"use client";
 import { useEffect } from "react";
 import { PropertyType } from "@/models/Property";
 
 interface PropertyViewProps {
   property: PropertyType;
 }
+
 const PropertyView = ({ property }: PropertyViewProps) => {
   useEffect(() => {
+    const propertyId = property._id.toString(); // Forzamos a string para evitar errores
+
     const incrementView = async () => {
       try {
-        // 1. Revisamos si ya existe una marca en el navegador
+        const storageKey = "viewed_properties";
         const viewedProperties = JSON.parse(
-          localStorage.getItem("viewed_properties") || "[]",
+          localStorage.getItem(storageKey) || "[]",
         );
 
-        // 2. Si el ID de esta propiedad NO está en la lista, la contamos
-        if (!viewedProperties.includes(property._id)) {
-          const res = await fetch(`/api/properties/${property._id}/view`, {
-            method: "PATCH",
-          });
+        // 1. Doble verificación: Si ya está en la lista, salimos volando
+        if (viewedProperties.includes(propertyId)) return;
 
-          if (res.ok) {
-            // 3. Guardamos el ID para no volver a contar en esta "sesión"
-            viewedProperties.push(property._id);
-            localStorage.setItem(
-              "viewed_properties",
-              JSON.stringify(viewedProperties),
-            );
-          }
+        // 2. Bloqueo preventivo: Lo añadimos al storage ANTES del fetch
+        // Esto evita que si el fetch tarda, otra ejecución entre.
+        const updatedViews = [...viewedProperties, propertyId];
+        localStorage.setItem(storageKey, JSON.stringify(updatedViews));
+
+        const res = await fetch(`/api/properties/${propertyId}/view`, {
+          method: "PATCH",
+        });
+
+        if (!res.ok) {
         }
       } catch (error) {
         console.error("Error al contar la vista:", error);
       }
     };
 
-    if (property?._id) {
+    if (propertyId) {
       incrementView();
     }
   }, [property._id]);
+
   return null;
 };
 

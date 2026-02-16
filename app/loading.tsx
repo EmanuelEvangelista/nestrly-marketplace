@@ -1,5 +1,5 @@
 "use client";
-import ClipLoader from "react-spinners/ClipLoader";
+import BarLoader from "react-spinners/BarLoader";
 import React from "react";
 
 interface LoadingProps {
@@ -14,14 +14,16 @@ const override: React.CSSProperties = {
 
 const LoadingPage = ({ loading }: LoadingProps) => {
   return (
-    <ClipLoader
-      color="#3b82f6"
-      loading={loading}
-      cssOverride={override}
-      size={150}
-      aria-label="Loading Spinner"
-      data-testid="loader"
-    />
+    <div className="flex justify-center items-center w-full">
+      <BarLoader
+        color="#3b82f6"
+        loading={loading}
+        cssOverride={override}
+        width={450}
+        height={15}
+        aria-label="Loading Spinner"
+      />
+    </div>
   );
 };
 

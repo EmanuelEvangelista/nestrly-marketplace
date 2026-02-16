@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/images/logo-nestrly.png";
@@ -17,6 +17,9 @@ const Navbar = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false);
   const [providers, setProviders] = useState<Record<string, any>>(null);
 
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
   const pathname: string = usePathname();
 
   useEffect(() => {
@@ -27,7 +30,35 @@ const Navbar = () => {
     setAuthProviders();
   }, []);
 
-  console.log(profileImage);
+  // 3. Efecto para cerrar al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Cerrar menú de perfil
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileMenuOpen(false);
+      }
+      // Cerrar menú móvil
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsProfileMenuOpen(false);
+  }, [pathname]);
 
   return (
     <nav className="bg-[#0f172a] border-b border-white/10 backdrop-blur-md fixed top-0 left-0 w-full z-50">
@@ -152,7 +183,10 @@ const Navbar = () => {
                 </button>
 
                 {isProfileMenuOpen && (
-                  <div className="absolute right-0 z-10 mt-3 w-52 rounded-xl bg-[#111827] border border-white/10 shadow-2xl py-2">
+                  <div
+                    ref={profileMenuRef}
+                    className="absolute right-0 z-10 mt-3 w-52 rounded-xl bg-[#111827] border border-white/10 shadow-2xl py-2"
+                  >
                     <Link
                       href="/profile"
                       className="block px-4 py-2 text-sm text-slate-300 hover:bg-white/10 hover:text-white transition"
@@ -188,7 +222,11 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div id="mobile-menu" className="md:hidden px-4 pb-6">
+        <div
+          ref={mobileMenuRef}
+          id="mobile-menu"
+          className="md:hidden px-4 pb-6"
+        >
           <div className="space-y-2 mt-4 bg-white/5 rounded-2xl p-4 border border-white/10">
             <Link
               href="/"
