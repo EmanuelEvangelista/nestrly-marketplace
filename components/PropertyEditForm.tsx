@@ -39,9 +39,11 @@ const PropertyEditForm = () => {
     views: 0,
   });
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
+    setMounted(true);
     const propertyId = Array.isArray(id) ? id[0] : id;
 
     if (!propertyId) return;
@@ -143,6 +145,7 @@ const PropertyEditForm = () => {
   };
 
   return (
+    mounted &&
     !loading && (
       <form onSubmit={handleSubmit}>
         <h2 className="text-3xl text-center font-bold mb-6">Edit Property</h2>
