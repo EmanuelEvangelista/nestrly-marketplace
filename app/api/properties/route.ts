@@ -138,6 +138,7 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.redirect(
       `${process.env.NEXTAUTH_URL}/properties/${newProperty._id}`,
+      303,
     );
   } catch (error) {
     console.error("POST PROPERTY ERROR:", error);
