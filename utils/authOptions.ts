@@ -2,6 +2,7 @@ import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
 import connectDB from "@/config/database";
 import User, { IUser } from "@/models/User";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 declare module "next-auth" {
   interface Session {
@@ -28,10 +29,48 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
+    // CREDENTIALS LOGIN (solo usuarios demo)
+    CredentialsProvider({
+      name: "Demo Login",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        await connectDB();
+
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Missing credentials");
+        }
+
+        const user = await User.findOne({
+          email: credentials.email.toLowerCase(),
+        });
+
+        if (!user) throw new Error("User not found");
+
+        // Comparación simple para demo
+        if (credentials.password !== user.password) {
+          throw new Error("Invalid password");
+        }
+
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.name,
+        };
+      },
+    }),
   ],
+
   callbacks: {
     //Invoked on successful sign in
-    async signIn({ profile }) {
+    async signIn({ user, account, profile }) {
+      // Si es Credentials, permitimos el paso directo (ya validamos en authorize)
+      if (account?.provider === "credentials") {
+        return true;
+      }
+
       const googleProfile = profile as GoogleProfile;
 
       if (!googleProfile || !googleProfile.email) {
@@ -67,5 +106,8 @@ export const authOptions: NextAuthOptions = {
       //3- Return session
       return session;
     },
+  },
+  session: {
+    strategy: "jwt",
   },
 };

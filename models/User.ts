@@ -5,6 +5,7 @@ export interface IUser {
   name: string;
   image?: string;
   bookmarks: Schema.Types.ObjectId[];
+  password: string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -17,6 +18,10 @@ const userSchema = new Schema<IUser>(
     name: {
       type: String,
       required: [true, "Name is required"],
+    },
+    password: {
+      type: String,
+      required: false,
     },
     image: {
       type: String,

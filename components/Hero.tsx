@@ -1,9 +1,13 @@
 import PropertySearchForm from "@/components/PropertySearchForm";
+import ButtonsDemo from "@/components/ButtonsDemo";
 
 const Hero = () => {
   return (
     <section className="bg-[#0f172a] relative overflow-hidden py-28">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="flex flex-col items-center text-center space-y-8">
+          <ButtonsDemo />
+        </div>
         <div className="flex flex-col items-center text-center space-y-8">
           <div className="space-y-6 max-w-3xl">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight">

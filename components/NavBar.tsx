@@ -139,16 +139,18 @@ const Navbar = () => {
             <div className="hidden md:block md:ml-6">
               <div className="flex items-center">
                 {providers &&
-                  Object.values(providers).map((provider, index) => (
-                    <button
-                      onClick={() => signIn(provider.id)}
-                      key={index}
-                      className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl font-medium shadow-lg shadow-orange-500/20 transition-all duration-200"
-                    >
-                      <FaGoogle className="text-white" />
-                      Login
-                    </button>
-                  ))}
+                  Object.values(providers)
+                    .filter((provider) => provider.id !== "credentials")
+                    .map((provider, index) => (
+                      <button
+                        onClick={() => signIn(provider.id)}
+                        key={index}
+                        className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl font-medium shadow-lg shadow-orange-500/20 transition-all duration-200"
+                      >
+                        <FaGoogle className="text-white" />
+                        Login
+                      </button>
+                    ))}
               </div>
             </div>
           )}
@@ -259,16 +261,18 @@ const Navbar = () => {
 
             {!session &&
               providers &&
-              Object.values(providers).map((provider, index) => (
-                <button
-                  onClick={() => signIn(provider.id)}
-                  key={index}
-                  className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl font-medium w-full justify-center transition"
-                >
-                  <FaGoogle />
-                  Login
-                </button>
-              ))}
+              Object.values(providers)
+                .filter((provider) => provider.id !== "credentials")
+                .map((provider, index) => (
+                  <button
+                    onClick={() => signIn(provider.id)}
+                    key={index}
+                    className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl font-medium w-full justify-center transition"
+                  >
+                    <FaGoogle />
+                    Login
+                  </button>
+                ))}
           </div>
         </div>
       )}
