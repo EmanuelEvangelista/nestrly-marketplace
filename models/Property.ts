@@ -1,4 +1,4 @@
-import { Schema, model, models, InferSchemaType } from "mongoose";
+import { Schema, model, models, Model, InferSchemaType } from "mongoose";
 
 const propertySchema = new Schema(
   {
@@ -88,6 +88,7 @@ export type PropertyType = InferSchemaType<typeof propertySchema> & {
 };
 
 const Property =
-  models.Property || model<PropertyType>("Property", propertySchema);
+  (models.Property as Model<PropertyType>) ||
+  model<PropertyType>("Property", propertySchema);
 
 export default Property;

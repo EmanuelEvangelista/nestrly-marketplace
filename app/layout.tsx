@@ -9,6 +9,7 @@ import { GlobalProvider } from "@/context/GlobalContext";
 import "react-toastify/dist/ReactToastify.css";
 import "@/assets/styles/globals.css";
 import "photoswipe/dist/photoswipe.css";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Nestrly | Smart Property Insights & Listings",
@@ -30,6 +31,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             <main>{children}</main>
             <Footer />
             <ToastContainer />
+            <Analytics />
           </body>
         </html>
       </AuthProvider>
