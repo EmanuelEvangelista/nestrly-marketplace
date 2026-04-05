@@ -26,7 +26,12 @@ export const GET = async (request: NextRequest) => {
     const user = await User.findOne({ _id: userId });
 
     // Get user bookmarks
-    const bookmarks = await Property.find({ _id: { $in: user.bookmarks } });
+    // Convertimos los ObjectIds a strings para que TS no se queje
+    const bookmarkIds = user.bookmarks.map((id: any) => id.toString());
+
+    const bookmarks = await Property.find({
+      _id: { $in: bookmarkIds },
+    });
 
     return NextResponse.json(bookmarks, { status: 200 });
   } catch (error) {
